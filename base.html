@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Account Management System{% endblock %}</title>
+  <style>
+    :root{font-family:Arial,sans-serif;color:#18212f;background:#f3f6fb}
+    *{box-sizing:border-box}body{margin:0}header{background:#173b67;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    header a{color:white;text-decoration:none;margin-left:14px}.container{max-width:1050px;margin:28px auto;padding:0 16px}
+    .card{background:white;padding:22px;border-radius:14px;box-shadow:0 4px 18px #1b355414;margin-bottom:18px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}.metric{font-size:27px;font-weight:bold;margin-top:8px}
+    label{display:block;font-weight:600;margin:14px 0 6px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+    button,.btn{display:inline-block;border:0;border-radius:8px;background:#2366b2;color:white;padding:11px 16px;text-decoration:none;font:inherit;cursor:pointer}
+    .danger{background:#b42318}.muted{color:#64748b}.errorlist{color:#b42318}.messages{padding:0;list-style:none}.messages li{padding:10px;background:#e4f7e9;border-radius:8px;margin-bottom:8px}
+    table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px;border-bottom:1px solid #e2e8f0}th{background:#f8fafc}
+    .tag{font-size:12px;padding:4px 8px;border-radius:20px;background:#e2e8f0}.income{color:#137547}.expense{color:#b42318}
+    @media(max-width:600px){table{font-size:13px}th,td{padding:7px}}
+  </style>
+</head>
+<body>
+<header>
+  <strong>Account Management System</strong>
+  <nav>
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'add_transaction' %}">Add transaction</a>
+      <form method="post" action="{% url 'logout' %}" style="display:inline">{% csrf_token %}<button type="submit">Logout</button></form>
+    {% else %}
+      <a href="{% url 'login' %}">Login</a><a href="{% url 'register' %}">Register</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="container">
+  {% if messages %}<ul class="messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+  {% block content %}{% endblock %}
+  <p class="muted" style="font-size:12px">Educational project only — not a real banking or payment service.</p>
+</main>
+</body></html>

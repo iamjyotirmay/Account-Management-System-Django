@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Add transaction{% endblock %}
+{% block content %}
+<div class="card" style="max-width:650px;margin:auto">
+<h1>Add transaction</h1><p class="muted">Enter an income or expense record.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Save transaction</button> <a class="btn" href="{% url 'dashboard' %}" style="background:#64748b">Cancel</a></form>
+</div>{% endblock %}

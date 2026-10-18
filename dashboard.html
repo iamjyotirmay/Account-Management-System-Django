@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Hello, {{ request.user.username }}!</h1>
+<p class="muted">Your personal income and expense overview.</p>
+<div class="cards">
+  <div class="card"><div class="muted">Total income</div><div class="metric income">₹{{ income|floatformat:2 }}</div></div>
+  <div class="card"><div class="muted">Total expenses</div><div class="metric expense">₹{{ expenses|floatformat:2 }}</div></div>
+  <div class="card"><div class="muted">Current balance</div><div class="metric">₹{{ balance|floatformat:2 }}</div></div>
+</div>
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2>Recent transactions</h2><a class="btn" href="{% url 'add_transaction' %}">+ Add transaction</a></div>
+  {% if transactions %}
+  <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Title</th><th>Type</th><th>Amount</th><th>Action</th></tr></thead><tbody>
+  {% for item in transactions %}<tr>
+    <td>{{ item.date|date:"d M Y" }}</td><td>{{ item.title }}</td>
+    <td class="{% if item.transaction_type == 'INCOME' %}income{% else %}expense{% endif %}">{{ item.get_transaction_type_display }}</td>
+    <td>₹{{ item.amount|floatformat:2 }}</td>
+    <td><form method="post" action="{% url 'delete_transaction' item.pk %}" onsubmit="return confirm('Delete this transaction?')">{% csrf_token %}<button class="danger" type="submit">Delete</button></form></td>
+  </tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<p>No transactions yet. Add your first income or expense.</p>{% endif %}
+</div>
+{% endblock %}
